@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>投票系统</title>
+    <!--base标签，永远固定相对路径跳转的结果-->
+    <base href="http://localhost:8083/book_test/">
+    <link type="text/css" rel="stylesheet" href="static/css/style.css">
+    <img src="static/img/companylog.png" title="yoka" alt="youka" border="0" width="211" height="78"/>
+
+    <script type="text/javascript" src="static/script/jquery-1.7.2.js"></script>
+
+    <style type="text/css">
+        .login_form{
+            height: 420px;
+            margin-top: 25px;
+        }
+
+
+    </style>
+</head>
+<body>
+
+
+<div id="vote">
+    <h1 align="center" >选择最喜欢的书籍</h1>
+    <div class="content">
+        <form action="/manager/bookServlet" method="post">
+
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

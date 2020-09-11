@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8" />
+    <title>图形展示</title>
+    <script src="https://cdn.bootcss.com/echarts/4.6.0/echarts.min.js"></script>
+</head>
+<body align="center">
+<div id="main" style="width: 1000px;height:400px;" align="center"></div>
+</body>
+
+<script type="text/javascript">
+    // 初始化ECharts组件到id为main的元素上
+    let myChart = echarts.init(document.getElementById('main'));
+    // 定义图标的配置项
+    let option = {
+        title: {
+            text: '书籍投票结果展示'
+        },
+        // 过长拖动展示
+        dataZoom : [
+            {
+                type: 'slider',
+                show: true,
+                start: 0,
+                end: 30,
+                xAxisIndex: [0],
+            },
+        ],
+        axisLabel :{
+            interval:0
+        },
+        grid: {
+            left: '10%',
+            bottom:'35%'
+        },
+        tooltip: {},
+        // x轴配置
+        xAxis: {
+            data:['Python从入门到实践',
+                'C++ Primer',
+                'C++ 项目开发|实战入门',
+                'C++标准库',
+                'Java编程思想',
+                'Java核心思想',
+                '数据结构和算法分析',
+                '深入理解Java虚拟机',
+                'JavaWeb项目实战',
+                '代码整洁之道',
+                'Spring 5 核心原理',
+                'Effective Java',
+                'Offer来了',
+                'Spring Boot实战',
+                'Java 8 函数式编程',
+                'Python标准库',
+                '利用Python进行数据分析',
+                'Python深度学习',
+                'Python核心编程',
+                'Python预测之美',
+                'Python统计分析',
+                'Effective Python']
+        },
+        // y轴配置
+        yAxis: {},
+        legend: {
+            data: ['票数']
+        },
+        series: [{
+            // 数据集
+            data: [[${dataList}]],
+            // 图表类型，这里使用line，柱状图
+            type: 'bar',
+            name:'票数',
+        }]
+    };
+    myChart.setOption(option);
+</script>
+</html>

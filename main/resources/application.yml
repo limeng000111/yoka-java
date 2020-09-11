@@ -1,0 +1,43 @@
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://121.199.6.172:3306/blindbox?useUnicode=true&characterEncoding=utf-8&useSSL=true&autoReconnect=true
+    username: blindbox-test2
+    password: erew#2ry
+
+  mail:
+    username: 2421712196@qq.com
+    password: uhktzvykvextecbe
+    host: smtp.qq.com
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
+    properties.mail.smtp.starttls.required: true
+    default-encoding: UTF-8
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+
+  jpa:
+    open-in-view=false:
+    hibernate:
+      #更新或者创建数据表结构
+      ddl-auto: update
+      #控制台显示sql
+      show-sql: true
+
+server:
+  port: 8080
+
+yoka:
+  endTime : 1609344000
+
+mybatis:
+  mapper-locations: classpath:Mapper/*.xml     #对应mapper映射xml文件所在路径
+  type-aliases-package: com.example.demo.User
+

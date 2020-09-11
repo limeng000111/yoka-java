@@ -1,0 +1,399 @@
+<html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>图书管理</title>
+
+    <!--添加背景音乐-->
+    <embed src="http://p4.music.126.net/HvB44MNINoLar8HFbRjIGQ==/109951165142435842.jpg?param=50y50&amp;quality=100" hidden="flase" autostart="true" loop="true">
+    <!--<script type="text/javascript" src="../static/script/jquery-1.7.2.js"></script>-->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        //倒计时，截止时间：2020/12/31 00:00:0
+        var time_now_server,time_now_client,time_end,time_server_client,timerID;
+
+        time_end=new Date("2020/12/31 00:00:0");//结束的时间
+        time_end=time_end.getTime();
+
+        time_now_server=new Date();//开始的时间
+        time_now_server=time_now_server.getTime();
+
+        time_now_client=new Date();
+        time_now_client=time_now_client.getTime();
+
+        time_server_client=time_now_server-time_now_client;
+
+        setTimeout("show_time()",1000);
+
+        function show_time()
+        {
+            var timer = document.getElementById("timer");
+            if(!timer){
+                return ;
+            }
+            timer.innerHTML =time_server_client;
+
+            var time_now,time_distance,str_time;
+            var int_day,int_hour,int_minute,int_second;
+            var time_now=new Date();
+            time_now=time_now.getTime()+time_server_client;
+            time_distance=time_end-time_now;
+            if(time_distance>0)
+            {
+                int_day=Math.floor(time_distance/86400000);
+                time_distance-=int_day*86400000;
+                int_hour=Math.floor(time_distance/3600000);
+                time_distance-=int_hour*3600000;
+                int_minute=Math.floor(time_distance/60000);
+                time_distance-=int_minute*60000;
+                int_second=Math.floor(time_distance/1000);
+                if(int_hour<10)
+                    int_hour="0"+int_hour;
+                if(int_minute<10)
+                    int_minute="0"+int_minute;
+                if(int_second<10)
+                    int_second="0"+int_second;
+                str_time=int_day+"天"+int_hour+"小时"+int_minute+"分钟"+int_second+"秒";
+                timer.innerHTML=str_time;
+                setTimeout("show_time()",1000);
+            }
+            else
+            {
+                timer.innerHTML =timer.innerHTML;
+                clearTimeout(timerID)
+            }
+        }
+        function sub(){
+            //获取的当前时间戳
+            var timestamp = (new Date()).getTime()/1000;
+            var deadlinetime = 1609344000;
+            if (deadlinetime > timestamp){
+                //通过ajax与后端数据进行交互
+                //获取选项
+                alert("走进sub()方法里面");
+                var obj = document.getElementsByName("select");
+                var check_val = [];
+                alert("还没有获取到phone");
+                var phoneNum = getPhone("phone");
+                alert("上个页面传的手机号："+phoneNum);
+
+                for (var k = 0;k < obj.length;k++){
+                    if (obj[k].checked){
+                        check_val.push(obj[k].id);
+                    }
+                }
+                alert(check_val);
+                alert("----即将进入ajax----");
+                $.ajax({
+                    url : "http://localhost:8080/data",
+                    type : "GET",
+                    data : {"check_val" : check_val,"phone":phoneNum},
+                    contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                    success : function (data) {
+                        alert(data);
+                        if (data==="您已经投过票啦"){
+                            url = "resultChartsLine";
+                            window.location.href = url;
+                        }
+                        else {
+                            alert("投票成功");
+                            url = "resultChartsLine";
+                            window.location.href = url;
+                        }
+                    },
+                    error:function (errorMsg) {
+                        alert(errorMsg);
+                        alert("请做出选择-----");
+                    }
+                })
+            } else {
+                alert("投票时间截止")
+            }
+        }
+
+        function search(){
+            var searchBook = document.getElementById("search");
+            // alert(searchBook);
+            if (searchBook == ""){
+                alert("请输入搜索内容")
+            } else {
+                alert("进入ajax");
+                $.ajax({
+                    url : "http://localhost:8080/queryBook",
+                    type : "GET",
+                    data : {"searchBook":$("#search").val()},
+                    contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                    success : function (data) {
+                        alert("book_manager页面");
+                        // url = "book_manager";
+                        // window.location.href = url;
+                    },
+                    error:function (errorMsg) {
+                        alert(errorMsg);
+                        alert("请输入搜索内容");
+                    }
+                })
+            }
+
+        }
+        //排序
+        function sort(){
+            alert("进入ajax");
+            $.ajax({
+                url : "http://localhost:8080/sort",
+                type : "GET",
+                // data : {"searchBook":$("#search").val()},
+                // contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                success : function (data) {
+                    alert("book_manager页面");
+                    // url = "book_manager";
+                    // window.location.href = url;
+                },
+                error:function (errorMsg) {
+                    alert(errorMsg);
+                    alert("排序有问题");
+                }
+            })
+        }
+        $(function () {
+            //倒计时10000s
+            $("#vote").click(function () {
+
+                var id = document.getElementsByName("select");
+                // alert(id);
+                var value = new Array();
+                for (var i = 0;i < id.length;i++){
+                    if (id[i].checked){
+                        value.push(id[i].id);
+                    }
+                }
+                // alert(value);
+                // alert("投票成功");
+            })
+        })
+
+        //获取上个页面的phone
+        function getPhone(key) {
+            var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        }
+
+    </script>
+
+</head>
+<style type="text/css">
+    div{
+        font-size:20px
+    }
+
+    .login{
+        background-color: dodgerblue;
+        width: 200px;
+        height: 30px;
+        color: cornflowerblue;
+
+    }
+
+    img{
+
+        margin: 0 80px;
+    }
+    .fe-mod-8-main-img{
+        text-align: center;
+    }
+    .sortNum{
+        color: black;
+        border-spacing: 1px;
+        background-color:dodgerblue;
+    }
+
+    .radio_type{
+        width: 20px;
+        height: 20px;
+        appearance: none;
+        position: relative;
+    }
+    .radio_type:before{
+        content: '';
+        width: 20px;
+        height: 20px;
+        /*border: 1px solid #7d7d7d;*/
+        display: inline-block;
+        border-radius: 50%;
+        vertical-align: middle;
+    }
+    .radio_type:checked:before{
+        content: '';
+        width: 20px;
+        height: 20px;
+        /*border: 1px solid #c59c5a;*/
+        background:green;
+        display: inline-block;
+        /*border-radius: 50%;*/
+        vertical-align: middle;
+    }
+    .radio_type:checked:after{
+        content: '';
+        width: 10px;
+        height:5px;
+        border: 2px solid white;
+        border-top: transparent;
+        border-right: transparent;
+        text-align: center;
+        display: block;
+        position: absolute;
+        top: 6px;
+        left:5px;
+        vertical-align: middle;
+        transform: rotate(-45deg);
+    }
+    .radio_type:checked+label{
+        color: #c59c5a;
+    }
+    .vote{
+        width: 150px;
+        height: 30px;
+        background-color: dodgerblue;
+    }
+
+    .time{
+        height: 25px;
+        width: 40px;
+    }
+    .search{
+
+        text-align: right;
+    }
+
+    audio{
+        display: none;
+    }
+    table{border-spacing: 30px 30px}
+</style>
+
+
+
+
+<body STYLE="BACKGROUND-COLOR:lightblue;">
+<br/>
+倒计时：<div id="timer"></div>
+<audio autoplay="autoplay" loop="loop" preload="auto" controls="controls"
+       src="http://p4.music.126.net/HvB44MNINoLar8HFbRjIGQ==/109951165142435842.jpg?param=50y50&amp;quality=100">
+</audio>
+
+<embed src=" " autostart="false" loop="false" />
+<bgsound src=" " autostart="true" loop="false" />
+<div class="search">
+<!--<input type="submit" value="搜索" name="vote" id="search" class="search" onclick="search()">-->
+    <input class="itxt" type="text" placeholder="根据书名进行查找" autocomplete="off"
+       tabindex="1" name="seach" id="search"/>
+    <input type="submit" value="搜索" name="seachbtn" id="seachbtn" onclick="search()">
+    <input type="submit" value="票数排序" name="sortNum" id="sortNum" class="sortNum" onclick="sort()">
+</div>
+
+    <div id="header" align="center">
+        <!--<img src="static/img/companylog.png" title="yoka" alt="youka" border="1" width="211" height="78"/>-->
+        <div class="content" align="center">
+
+            </div>
+            <!--<div class="case-comment">-->
+                <!--欢迎投票-->
+            <!--</div>-->
+            <h3 class="case-title">选出对你影响最大的书籍</h3>
+            <p class="case-ad-desc"><span>2020.8.13 -- 2020.10.13</span></p>
+
+            <div class="case-outer">
+                <div class="case">
+
+
+                        <!--<li class="case-perform-data">-->
+                            <div class="case-perform-field">
+                                <span class="case-perform-value"><i class="case-perform-symbol case-perform-symbol_" th:text="${totalNum}"></i></span>
+                                <span class="case-perform-unit">票</span>
+                            </div>
+                            <div class="case-perform-desc">
+                                累计投票数
+                            </div>
+                            <p class="case-desc">立身以立学为先，立学以读书为本。 ---朱熹</p>
+                            <br/>
+                            <br/>
+                            <p class="separator">------------------------------书籍展示-------------------------------</p>
+                        <!--</li>-->
+
+                </div>
+                <div class="form">
+                    <form action="bookServlet" method="post">
+                        <input type="hidden" name="action" value="vote">
+                        <table>
+                            <tr th:each="bookRecorde:${bookRecordes}">
+                                <td>
+                                    <div class="fe-mod-8-good fe-mod-8-good0" atc="0">
+                                        <div class="fe-mod-8-main fe-mod-8-main-opstyle0">
+                                            <a class="fe-mod-8-main-img" >
+                                                <img th:src="@{${bookRecorde.img}}"  class="goodimg goodimg_794409" />
+                                                <div class="title" th:text="${bookRecorde.bookName}">
+                                                </div>
+                                                <!--<span class="case-perform-value"><i class="case-perform-symbol case-perform-symbol_" th:text="${bookRecorde.num}"></i></span>-->
+                                                <!--<span class="case-perform-unit">票</span>-->
+                                                <div class="case-perform-desc">
+                                                    累计投票数
+                                                </div>
+                                                <div class="sale_num" th:text="${bookRecorde.num}">
+                                                </div>
+
+
+                                                <div class="fe-mod-8-main-name">
+                                                    <!--<div class="fe-mod-8-main-name-name vote_selected" id="selected_794409" rel="投票" style="color: blue"  onclick="ready_vote(2,this)">投票</div>-->
+                                                    <!--<input type="submit" value="投票" name="login" id="login0" class="login0" style='color: black'  >-->
+
+                                                    <input type="checkbox" name = "select" class = "radio_type" id = "Python从入门到实践" />
+                                                    <!--<span class = "span-style">testFS3</span>-->
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+
+
+                            </tr>
+
+                        </table>
+
+                        <input type="submit" value="投票" name="vote" id="vote" class="vote" onclick="sub()">
+                    </form>
+                </div>
+            </div>
+
+
+    </div>
+
+
+<!--系统时间-->
+    <script>
+    Date.prototype.format = function (fmt) {
+    var o = {
+    "y+": this.getFullYear, //年
+    "M+": this.getMonth() + 1, //月份
+    "d+": this.getDate(), //日
+    "h+": this.getHours(), //小时
+    "m+": this.getMinutes(), //分
+    "s+": this.getSeconds() //秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+    }
+    setInterval("document.getElementById('dateTime').innerHTML = (new Date()).format('yyyy-MM-dd hh:mm:ss');", 1000);
+    </script>
+
+    <div id="dateTime"></div>
+    <p><a href="http://localhost:8080/queryAll">投票信息介绍</a></p>
+
+</body>
+</html>

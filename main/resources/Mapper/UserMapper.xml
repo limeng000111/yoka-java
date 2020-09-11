@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 指定工作空间，要与接口名相同，源代码没有去看，猜测应该是通过"这里的namespace.下边方法的id"来定位方法的 -->
+<mapper namespace="com.example.demo.Dao.TestMapper">
+
+    <!-- insert user -->
+    <insert id = "insert" parameterType="com.example.demo.User.UserInfo">
+        INSERT INTO voter_test(id,phone,passwd,email) VALUES(,#{username},#{password},#{email});
+    </insert>
+
+    <!-- update user -->
+    <update id="update" parameterType="com.example.demo.User.UserInfo">
+        UPDATE voter_test SET USERNAME=#{username} , PASSWORD=#{password} , email = #{email} WHERE ID=#{id}
+    </update>
+
+    <!-- find user -->
+    <select id="find" parameterType="int" resultType="com.example.demo.User.UserInfo">
+        SELECT id,phone,passwd,email FROM USER WHERE phone=#{0}
+    </select>
+
+    <!-- delete user -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM USER WHERE ID=#{0}
+    </delete>
+</mapper>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>投票系统</title>
+    <img src="companylog.png" title="yoka" alt="youka" border="1" width="211" height="78"/>
+
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#login").click(function () {
+                //获取用户名并校验
+                var usernameText = $("#username").val();
+                var usernamePatt = /^\w{5,12}$/;
+                if (!usernamePatt.test(usernameText)){
+                    //提示用户结果
+                    $("span.errorMsg").text("用户名不合法");
+                    return false;
+                    alert(usernameText);
+                }
+
+                var passwordText = $("#password").val();
+                var passwordPatt = /^\w{5,12}$/;
+                if (!passwordPatt.test(passwordText)){
+                    //提示用户结果
+                    $("span.errorMsg").text("输入密码不合法");
+                    alert(passwordText)
+                    return false;
+                }
+
+                $.ajax({
+                    url : "http://localhost:8080/loginData",
+                    type : "POST",
+                    data : {"userName" : usernameText,
+                            "passWord" : passwordText,
+                    },
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    success : function (data) {
+                        if (data == "存在该用户"){
+                            // window.location.href='book_manager';
+                            // // 以下方式定时跳转
+                            // setTimeout("javascript:location.href='book_manager'", 500);
+                            url = "book_manager?phone="+usernameText;
+                            window.location.href = url;
+                        }
+                        else {
+                            alert("用户不存在");
+                        }
+                    },
+                    error:function (errorThrown) {
+                        alert("用户不存在");
+                    }
+                })
+
+
+            })
+
+
+        })
+
+        // $(function () {
+        //     $("#login").click(function () {
+        //
+        //     })
+        // })
+    </script>
+    <style type="text/css">
+        .login_form{
+            height: 420px;
+            margin-top: 25px;
+        }
+        body {
+            background-image:url("index.jpg");
+            /*style=" background-repeat:no-repeat ;*/
+            background-size:100% 100%;
+            background-attachment: fixed;"
+        }
+
+    </style>
+</head>
+<body>
+<div id="login_header">
+    <img class="login_img" >
+</div>
+<div class="login_banner" align="center" style="padding-top: 130px" >
+    <!--<div id="l_content">-->
+    <!--<span class="login_word">欢迎注册</span>-->
+    <!--</div>-->
+
+    <div id="content">
+        <div class="login_form">
+            <div class="login_box">
+                <div class="tit">
+                    <h2>登录</h2>
+                    <span class="errorMsg" style="color: red"></span>
+                </div>
+                <div class="form">
+
+                    <input type="hidden" name="action" value="register">
+                    <label>用户名称：</label>
+                    <input class="itxt" type="text" placeholder="请输入手机号" autocomplete="off"
+                           tabindex="1" name="username" id="username"/>
+                    <br/>
+                    <br/>
+                    <label>输入密码：</label>
+                    <input class="itxt" type="password" placeholder="5-12数字和字母组合" autocomplete="off"
+                           tabindex="1" name="password" id="password"/><br/>
+                    <br/>
+                    <input type="submit" value="登录" name="login" id="login">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
