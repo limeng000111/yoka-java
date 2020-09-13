@@ -18,7 +18,7 @@ public class SendEmailJob {
     @Resource
     private MailService mailService;
 
-    @Scheduled(cron = "0 0/1 12 2 * *")
+    @Scheduled(cron = "0 0 0 0/1 * *")
     public void sendEmail(){
         String to = "2421712196@qq.com";
         String subject = "hello, 这是投票统计邮件";

@@ -33,7 +33,7 @@ public class VoteDay {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         // new Date()为获取当前系统时间
         String currentTime = df.format(new Date());
-        String dateVoteTime;
+//        String dateVoteTime;
 //        List<UserRecorde> list = new ArrayList<UserRecorde>();
 ////        list = recordResipository.selectUserRecorde(phone);
 //        list =  recordResipository.findAll();
@@ -43,8 +43,8 @@ public class VoteDay {
             is_flag = true;
 
         }else {
-            dateVoteTime = new SimpleDateFormat("yyyy-MM-dd").format(voteTime);
-            if (currentTime.equals(dateVoteTime)){
+//            dateVoteTime = new SimpleDateFormat("yyyy-MM-dd").format(voteTime);
+            if (currentTime.equals(voteTime)){
                 is_flag = false;
             }else {
                 is_flag = true;

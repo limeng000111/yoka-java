@@ -101,11 +101,7 @@ public class HelloController {
                 UserRecorde userRecorde = new UserRecorde();
                 userRecorde.setPhone(phone);
                 userRecorde.setVotetime(time);
-
                 recordResipository.save(userRecorde);
-//            recordResipository.insertVoteRecord(phone,time);
-//            userResipository.save(userRecorde);
-//            userResipository.insertVoteRecord(phone,params,time);
                 for (String book : params){
                     System.out.println("for循环获得每一本书："+book);
                     userResipository.updateBookNum(book);
@@ -113,15 +109,12 @@ public class HelloController {
                     System.out.println("update成功");
                 }
                 System.out.println("即将进入return");
-
                 return "投票成功";
             }else {
-
                 return "您已经投过票啦";
             }
         }
         else {
-
             return "已过截止时间";
         }
     }
@@ -154,23 +147,32 @@ public class HelloController {
                                 @RequestParam(value = "passWord") String password,
                                 @RequestParam(value = "email") String email
                                 ){
-        //将注册的用户信息添加到数据库
-        UserInfo user = new UserInfo();
-        user.setIphone(name);
-        user.setPasswd(password);
-        user.setEmail(email);
-        //设置日期格式
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        // new Date()为获取当前系统时间
-        String time = df.format(new Date());
-        System.out.println(time);
-        user.setTime(time);
-        //调用分装好的方法进行保存
-        userResipository.save(user);
-        System.out.println("新增用户添加到数据库中，请查看。");
-        System.out.println("注册用户信息："+name+" "+password+" " + email);
-
-        return "注册成功";
+        //判断用户是否注册
+        List list = new ArrayList();
+        list = userResipository.selectUser(name,password);
+        System.out.println("----这是用户数据："+list);
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("book_manager");
+        if (list.size() == 0){
+            //将注册的用户信息添加到数据库
+            UserInfo user = new UserInfo();
+            user.setIphone(name);
+            user.setPasswd(password);
+            user.setEmail(email);
+            //设置日期格式
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            // new Date()为获取当前系统时间
+            String time = df.format(new Date());
+            System.out.println(time);
+            user.setTime(time);
+            //调用分装好的方法进行保存
+            userResipository.save(user);
+            System.out.println("新增用户添加到数据库中，请查看。");
+            System.out.println("注册用户信息："+name+" "+password+" " + email);
+            return "注册成功";
+        }else {
+            return "存在该用户";
+        }
     }
 
     //打开登录页面
@@ -189,8 +191,8 @@ public class HelloController {
         List list = new ArrayList();
         list = userResipository.selectUser(name,password);
         System.out.println("----这是用户数据："+list);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("book_manager");
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("book_manager");
         if (list.size() != 0){
             return "存在该用户";
         }else {
@@ -232,7 +234,7 @@ public class HelloController {
     }
 
     //查询符合条件的书籍
-    @RequestMapping(value = "/queryBook",method = RequestMethod.GET)
+    @RequestMapping(value = "/book_manager_search",method = RequestMethod.GET)
     public String  queryBook(@RequestParam(value = "searchBook") String searchBook,Model model){
         System.out.println("这是前端的查询字段："+searchBook);
         List<BookNumInfo> dataList = new ArrayList<>();
@@ -251,6 +253,7 @@ public class HelloController {
         return "book_manager";
 
     }
+
 
 
 //    @Test

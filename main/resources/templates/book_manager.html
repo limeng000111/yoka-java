@@ -5,7 +5,7 @@
     <title>图书管理</title>
 
     <!--添加背景音乐-->
-    <embed src="http://p4.music.126.net/HvB44MNINoLar8HFbRjIGQ==/109951165142435842.jpg?param=50y50&amp;quality=100" hidden="flase" autostart="true" loop="true">
+    <embed src="http://p4.music.126.net/HvB44MNINoLar8HFbRjIGQ==/109951165142435842.jpg?param=50y50&amp;quality=100" hidden="true" autostart="true" loop="true">
     <!--<script type="text/javascript" src="../static/script/jquery-1.7.2.js"></script>-->
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript">
@@ -71,20 +71,15 @@
             if (deadlinetime > timestamp){
                 //通过ajax与后端数据进行交互
                 //获取选项
-                alert("走进sub()方法里面");
                 var obj = document.getElementsByName("select");
                 var check_val = [];
-                alert("还没有获取到phone");
                 var phoneNum = getPhone("phone");
-                alert("上个页面传的手机号："+phoneNum);
-
                 for (var k = 0;k < obj.length;k++){
                     if (obj[k].checked){
                         check_val.push(obj[k].id);
                     }
                 }
                 alert(check_val);
-                alert("----即将进入ajax----");
                 $.ajax({
                     url : "http://localhost:8080/data",
                     type : "GET",
@@ -120,14 +115,14 @@
             } else {
                 alert("进入ajax");
                 $.ajax({
-                    url : "http://localhost:8080/queryBook",
+                    url : "http://localhost:8080/book_manager_search",
                     type : "GET",
                     data : {"searchBook":$("#search").val()},
                     contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                     success : function (data) {
                         alert("book_manager页面");
-                        // url = "book_manager";
-                        // window.location.href = url;
+                        url = "book_manager_search";
+                        window.location.href = url;
                     },
                     error:function (errorMsg) {
                         alert(errorMsg);
@@ -197,6 +192,9 @@
         height: 30px;
         color: cornflowerblue;
 
+    }
+    audio{
+        display: none;
     }
 
     img{
@@ -274,6 +272,11 @@
         display: none;
     }
     table{border-spacing: 30px 30px}
+
+    .time{
+
+
+    }
 </style>
 
 
@@ -281,11 +284,13 @@
 
 <body STYLE="BACKGROUND-COLOR:lightblue;">
 <br/>
-倒计时：<div id="timer"></div>
+
+倒计时：<div id="timer">
+</div>
+<!--背景音乐-->
 <audio autoplay="autoplay" loop="loop" preload="auto" controls="controls"
        src="http://p4.music.126.net/HvB44MNINoLar8HFbRjIGQ==/109951165142435842.jpg?param=50y50&amp;quality=100">
 </audio>
-
 <embed src=" " autostart="false" loop="false" />
 <bgsound src=" " autostart="true" loop="false" />
 <div class="search">
@@ -305,7 +310,7 @@
                 <!--欢迎投票-->
             <!--</div>-->
             <h3 class="case-title">选出对你影响最大的书籍</h3>
-            <p class="case-ad-desc"><span>2020.8.13 -- 2020.10.13</span></p>
+            <p class="case-ad-desc"><span>2020.8.13 -- 2020.12.31</span></p>
 
             <div class="case-outer">
                 <div class="case">
