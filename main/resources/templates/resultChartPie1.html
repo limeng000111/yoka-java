@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.6.0/echarts.min.js"></script>
+</head>
+<body>
+
+<!--//展示图的div，需要设置宽度高度，以及设置id-->
+<div id="main" style="width: 1000px;height:700px"></div>
+
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            x: 'left',
+            data:[]
+        },
+        series : []
+    };
+    //加载数据
+    jQuery.ajax({
+        url:"http://localhost:8080/resultChartPie",  //访问后台的路径
+        type:'get',
+        dataType:'json',
+        success:function(jsons){
+            var Item = function(){
+                return {
+                    name:'',
+                    type:'pie',//柱状图
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data:[]
+                }
+            };
+            var Series = [];
+            var arr = [];
+            for(var i=0;i < jsons.legends.length;i++){
+                var it = new Item();
+                it.name = jsons.legends[i];
+                arr.push({
+                    name :  jsons.nameList[i],
+                    value : jsons.valueList[i]
+                });
+                it.data = arr;
+                Series.push(it);
+            }
+            option.legend.data = jsons.legends;   // 设置legend
+            option.series = Series; // 设置图表
+            myChart.setOption(option);// 重新加载图表
+        },
+        error:function(){
+            alert("数据加载失败！请检查数据链接是否正确");
+        }
+    });
+    // 初次加载图表(无数据)
+    myChart.setOption(option);
+</script>
+</body>
+</html>

@@ -234,14 +234,12 @@ public class HelloController {
     }
 
     //查询符合条件的书籍
-    @RequestMapping(value = "/book_manager_search",method = RequestMethod.GET)
-    public String  queryBook(@RequestParam(value = "searchBook") String searchBook,Model model){
-        System.out.println("这是前端的查询字段："+searchBook);
-        List<BookNumInfo> dataList = new ArrayList<>();
-        dataList = bookNumResipository.selectBookInfo(searchBook);
-        System.out.println(dataList);
-        model.addAttribute("bookRecordes",dataList);
-        return "book_manager_search";
+    @RequestMapping(value = "/book_search",method = RequestMethod.GET)
+    public String  queryBook(@RequestParam(value = "searchBook") String searchBook, Model model){
+        List<BookNumInfo> list = bookNumResipository.selectBookInfo(searchBook);
+        //将书籍投票作为对象返回到前端
+        model.addAttribute("bookRecordes",list);
+        return "book_manager::book_recorde";
     }
 
     //票数从高往低排序
@@ -250,17 +248,42 @@ public class HelloController {
         List<BookNumInfo> list = new ArrayList<>();
         list = bookNumResipository.sort();
         model.addAttribute("bookRecordes",list);
-        return "book_manager";
+        return "book_manager::book_recorde";
 
     }
 
 
+    @RequestMapping(value = "/resultChartPieTest",method = RequestMethod.GET)
+    public String chartPieTest(){
+        return "resultChartPie1";
+    }
+    //饼状图展示
+    @RequestMapping(value = "/resultChartPie",method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String,Object>  queryBook(){
+        Map<String,Object> map = new HashMap<String,Object>();
+        List<Integer> valueList =new ArrayList<Integer>();
+        //获取每本书的票数和书名
+        List<BookNumInfo> list = new ArrayList();
+        List<String> nameList =new ArrayList<String>();
+        list = bookNumResipository.findAll();
+        for (int i = 0; i < list.size();i++){
+            String bookName = list.get(i).getBookName();
+            int bookVoteNum = list.get(i).getNum();
+            valueList.add(bookVoteNum);
+            nameList.add(bookName);
+        }
 
-//    @Test
-//    public void test1(){
-//        voteEmailService.sendEmail("2421712196@qq.com","2421712196@qq.com","这是标题","这是内容");
-//    }
-//
+        String [] legends = {"Python从入门到实践","C++ Primer","C++ 项目开发实战入门","C++ 标准库","Java编程思想","Java核心思想",
+                "数据结构和算法分析","深入理解Java虚拟机","JavaWeb项目实战","代码整洁之道","Spring 5核心原理","Effective Java",
+                "Offer来了","Spring Boot实战","Java 8 函数式编程","Python标准库","利用Python进行数据分析","Python深度学习",
+                "Python核心编程","Python预测之美","Python统计分析","Effective Python"};
+        map.put("legends", legends);
+        map.put("nameList", nameList);
+        map.put("valueList", valueList);
+        return map;
+
+    }
 }
 
 

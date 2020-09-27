@@ -7,7 +7,16 @@
 </head>
 <body align="center">
 <div id="main" style="width: 1000px;height:400px;" align="center"></div>
+<input type="submit" value="饼状图" id="Pie" CLASS="Pie" onclick="changePie()">
 </body>
+<script>
+    function changePie() {
+
+        url = "resultChartPieTest";
+        window.location.href = url;
+
+    }
+</script>
 
 <script type="text/javascript">
     // 初始化ECharts组件到id为main的元素上

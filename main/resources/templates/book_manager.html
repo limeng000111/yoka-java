@@ -5,8 +5,11 @@
     <title>图书管理</title>
 
     <!--添加背景音乐-->
-    <embed src="http://p4.music.126.net/HvB44MNINoLar8HFbRjIGQ==/109951165142435842.jpg?param=50y50&amp;quality=100" hidden="true" autostart="true" loop="true">
+    <!--<embed src="http://p4.music.126.net/HvB44MNINoLar8HFbRjIGQ==/109951165142435842.jpg?param=50y50&amp;quality=100" hidden="true" autostart="true" loop="true">-->
     <!--<script type="text/javascript" src="../static/script/jquery-1.7.2.js"></script>-->
+    <embed  loop="true"  autostart="true" hidden="true"
+           src="https://music.163.com/song?id=28152199&userid=344979197" >
+    </embed>
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript">
 
@@ -79,15 +82,16 @@
                         check_val.push(obj[k].id);
                     }
                 }
-                alert(check_val);
+                // alert(check_val);
                 $.ajax({
                     url : "http://localhost:8080/data",
                     type : "GET",
                     data : {"check_val" : check_val,"phone":phoneNum},
                     contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                     success : function (data) {
-                        alert(data);
+                        // alert(data);
                         if (data==="您已经投过票啦"){
+                            alert(data);
                             url = "resultChartsLine";
                             window.location.href = url;
                         }
@@ -109,20 +113,17 @@
 
         function search(){
             var searchBook = document.getElementById("search");
-            // alert(searchBook);
             if (searchBook == ""){
                 alert("请输入搜索内容")
             } else {
-                alert("进入ajax");
                 $.ajax({
-                    url : "http://localhost:8080/book_manager_search",
+                    url : "http://localhost:8080/book_search",
                     type : "GET",
                     data : {"searchBook":$("#search").val()},
                     contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                     success : function (data) {
-                        alert("book_manager页面");
-                        url = "book_manager_search";
-                        window.location.href = url;
+                        // alert("开始渲染页面啦");
+                        $(".book_recorde").html(data);
                     },
                     error:function (errorMsg) {
                         alert(errorMsg);
@@ -134,16 +135,15 @@
         }
         //排序
         function sort(){
-            alert("进入ajax");
             $.ajax({
                 url : "http://localhost:8080/sort",
                 type : "GET",
                 // data : {"searchBook":$("#search").val()},
                 // contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                 success : function (data) {
-                    alert("book_manager页面");
-                    // url = "book_manager";
-                    // window.location.href = url;
+                    alert("开始渲染页面啦");
+
+                    $(".book_recorde").html(data);
                 },
                 error:function (errorMsg) {
                     alert(errorMsg);
@@ -273,10 +273,6 @@
     }
     table{border-spacing: 30px 30px}
 
-    .time{
-
-
-    }
 </style>
 
 
@@ -288,6 +284,7 @@
 倒计时：<div id="timer">
 </div>
 <!--背景音乐-->
+<!--<input type="submit" value="投票" name="vote" id="vote" class="vote" onclick="sub()">-->
 <audio autoplay="autoplay" loop="loop" preload="auto" controls="controls"
        src="http://p4.music.126.net/HvB44MNINoLar8HFbRjIGQ==/109951165142435842.jpg?param=50y50&amp;quality=100">
 </audio>
@@ -297,7 +294,7 @@
 <!--<input type="submit" value="搜索" name="vote" id="search" class="search" onclick="search()">-->
     <input class="itxt" type="text" placeholder="根据书名进行查找" autocomplete="off"
        tabindex="1" name="seach" id="search"/>
-    <input type="submit" value="搜索" name="seachbtn" id="seachbtn" onclick="search()">
+    <input type="submit" value="搜索" name="seachbtn" id="seachbtn" class="seachbtn" onclick="search()">
     <input type="submit" value="票数排序" name="sortNum" id="sortNum" class="sortNum" onclick="sort()">
 </div>
 
@@ -331,46 +328,39 @@
                         <!--</li>-->
 
                 </div>
-                <div class="form">
-                    <form action="bookServlet" method="post">
-                        <input type="hidden" name="action" value="vote">
-                        <table>
-                            <tr th:each="bookRecorde:${bookRecordes}">
-                                <td>
-                                    <div class="fe-mod-8-good fe-mod-8-good0" atc="0">
-                                        <div class="fe-mod-8-main fe-mod-8-main-opstyle0">
-                                            <a class="fe-mod-8-main-img" >
-                                                <img th:src="@{${bookRecorde.img}}"  class="goodimg goodimg_794409" />
-                                                <div class="title" th:text="${bookRecorde.bookName}">
-                                                </div>
-                                                <!--<span class="case-perform-value"><i class="case-perform-symbol case-perform-symbol_" th:text="${bookRecorde.num}"></i></span>-->
-                                                <!--<span class="case-perform-unit">票</span>-->
-                                                <div class="case-perform-desc">
-                                                    累计投票数
-                                                </div>
-                                                <div class="sale_num" th:text="${bookRecorde.num}">
-                                                </div>
+                <div  class="book_recorde" th:fragment="book_recorde">
+                        <table id="myTable">
+                            <!--<div class="book_recorde" th:fragment="book_recorde">-->
+                                <tr th:each="bookRecorde:${bookRecordes}">
+                                    <td>
+                                        <div class="fe-mod-8-good fe-mod-8-good0" atc="0">
+                                            <div class="fe-mod-8-main fe-mod-8-main-opstyle0">
+                                                <a class="fe-mod-8-main-img" >
+                                                    <img th:src="@{${bookRecorde.img}}"  class="goodimg goodimg_794409" />
+                                                    <div class="title" th:text="${bookRecorde.bookName}">
+                                                    </div>
+                                                    <div class="case-perform-desc">
+                                                        累计投票数
+                                                    </div>
+                                                    <div class="sale_num" th:text="${bookRecorde.num}">
+                                                    </div>
+                                                    <div class="fe-mod-8-main-name">
+                                                        <!--<div class="fe-mod-8-main-name-name vote_selected" id="selected_794409" rel="投票" style="color: blue"  onclick="ready_vote(2,this)">投票</div>-->
+                                                        <!--<input type="submit" value="投票" name="login" id="login0" class="login0" style='color: black'  >-->
 
-
-                                                <div class="fe-mod-8-main-name">
-                                                    <!--<div class="fe-mod-8-main-name-name vote_selected" id="selected_794409" rel="投票" style="color: blue"  onclick="ready_vote(2,this)">投票</div>-->
-                                                    <!--<input type="submit" value="投票" name="login" id="login0" class="login0" style='color: black'  >-->
-
-                                                    <input type="checkbox" name = "select" class = "radio_type" id = "Python从入门到实践" />
-                                                    <!--<span class = "span-style">testFS3</span>-->
-                                                </div>
-                                            </a>
+                                                        <input type="checkbox" name = "select" class = "radio_type" id = "vote" />
+                                                        <!--<span class = "span-style">testFS3</span>-->
+                                                    </div>
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-
-
-                            </tr>
-
+                                    </td>
+                                </tr>
+                            <!--</div>-->
                         </table>
 
                         <input type="submit" value="投票" name="vote" id="vote" class="vote" onclick="sub()">
-                    </form>
+                    <!--</form>-->
                 </div>
             </div>
 
