@@ -15,20 +15,14 @@
 
         //倒计时，截止时间：2020/12/31 00:00:0
         var time_now_server,time_now_client,time_end,time_server_client,timerID;
-
         time_end=new Date("2020/12/31 00:00:0");//结束的时间
         time_end=time_end.getTime();
-
         time_now_server=new Date();//开始的时间
         time_now_server=time_now_server.getTime();
-
         time_now_client=new Date();
         time_now_client=time_now_client.getTime();
-
         time_server_client=time_now_server-time_now_client;
-
         setTimeout("show_time()",1000);
-
         function show_time()
         {
             var timer = document.getElementById("timer");
@@ -82,14 +76,13 @@
                         check_val.push(obj[k].id);
                     }
                 }
-                // alert(check_val);
+                alert(check_val);
                 $.ajax({
-                    url : "http://localhost:8080/data",
+                    url : "http://10.225.10.102:8080/data",
                     type : "GET",
                     data : {"check_val" : check_val,"phone":phoneNum},
                     contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                     success : function (data) {
-                        // alert(data);
                         if (data==="您已经投过票啦"){
                             alert(data);
                             url = "resultChartsLine";
@@ -110,19 +103,17 @@
                 alert("投票时间截止")
             }
         }
-
         function search(){
             var searchBook = document.getElementById("search");
             if (searchBook == ""){
                 alert("请输入搜索内容")
             } else {
                 $.ajax({
-                    url : "http://localhost:8080/book_search",
+                    url : "http://10.225.10.102:8080/book_search",
                     type : "GET",
                     data : {"searchBook":$("#search").val()},
                     contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                     success : function (data) {
-                        // alert("开始渲染页面啦");
                         $(".book_recorde").html(data);
                     },
                     error:function (errorMsg) {
@@ -136,14 +127,10 @@
         //排序
         function sort(){
             $.ajax({
-                url : "http://localhost:8080/sort",
+                url : "http://10.225.10.102:8080/sort",
                 type : "GET",
-                // data : {"searchBook":$("#search").val()},
-                // contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                 success : function (data) {
-                    alert("开始渲染页面啦");
-
-                    $(".book_recorde").html(data);
+                $(".book_recorde").html(data);
                 },
                 error:function (errorMsg) {
                     alert(errorMsg);
@@ -154,7 +141,6 @@
         $(function () {
             //倒计时10000s
             $("#vote").click(function () {
-
                 var id = document.getElementsByName("select");
                 // alert(id);
                 var value = new Array();
@@ -163,8 +149,6 @@
                         value.push(id[i].id);
                     }
                 }
-                // alert(value);
-                // alert("投票成功");
             })
         })
 
@@ -191,14 +175,11 @@
         width: 200px;
         height: 30px;
         color: cornflowerblue;
-
     }
     audio{
         display: none;
     }
-
     img{
-
         margin: 0 80px;
     }
     .fe-mod-8-main-img{
@@ -209,7 +190,6 @@
         border-spacing: 1px;
         background-color:dodgerblue;
     }
-
     .radio_type{
         width: 20px;
         height: 20px;
@@ -220,7 +200,6 @@
         content: '';
         width: 20px;
         height: 20px;
-        /*border: 1px solid #7d7d7d;*/
         display: inline-block;
         border-radius: 50%;
         vertical-align: middle;
@@ -229,10 +208,8 @@
         content: '';
         width: 20px;
         height: 20px;
-        /*border: 1px solid #c59c5a;*/
         background:green;
         display: inline-block;
-        /*border-radius: 50%;*/
         vertical-align: middle;
     }
     .radio_type:checked:after{
@@ -258,29 +235,20 @@
         height: 30px;
         background-color: dodgerblue;
     }
-
     .time{
         height: 25px;
         width: 40px;
     }
     .search{
-
         text-align: right;
     }
-
     audio{
         display: none;
     }
     table{border-spacing: 30px 30px}
-
 </style>
-
-
-
-
 <body STYLE="BACKGROUND-COLOR:lightblue;">
 <br/>
-
 倒计时：<div id="timer">
 </div>
 <!--背景音乐-->
@@ -291,29 +259,18 @@
 <embed src=" " autostart="false" loop="false" />
 <bgsound src=" " autostart="true" loop="false" />
 <div class="search">
-<!--<input type="submit" value="搜索" name="vote" id="search" class="search" onclick="search()">-->
     <input class="itxt" type="text" placeholder="根据书名进行查找" autocomplete="off"
        tabindex="1" name="seach" id="search"/>
     <input type="submit" value="搜索" name="seachbtn" id="seachbtn" class="seachbtn" onclick="search()">
     <input type="submit" value="票数排序" name="sortNum" id="sortNum" class="sortNum" onclick="sort()">
 </div>
-
     <div id="header" align="center">
-        <!--<img src="static/img/companylog.png" title="yoka" alt="youka" border="1" width="211" height="78"/>-->
         <div class="content" align="center">
-
             </div>
-            <!--<div class="case-comment">-->
-                <!--欢迎投票-->
-            <!--</div>-->
             <h3 class="case-title">选出对你影响最大的书籍</h3>
             <p class="case-ad-desc"><span>2020.8.13 -- 2020.12.31</span></p>
-
             <div class="case-outer">
                 <div class="case">
-
-
-                        <!--<li class="case-perform-data">-->
                             <div class="case-perform-field">
                                 <span class="case-perform-value"><i class="case-perform-symbol case-perform-symbol_" th:text="${totalNum}"></i></span>
                                 <span class="case-perform-unit">票</span>
@@ -325,12 +282,9 @@
                             <br/>
                             <br/>
                             <p class="separator">------------------------------书籍展示-------------------------------</p>
-                        <!--</li>-->
-
                 </div>
                 <div  class="book_recorde" th:fragment="book_recorde">
                         <table id="myTable">
-                            <!--<div class="book_recorde" th:fragment="book_recorde">-->
                                 <tr th:each="bookRecorde:${bookRecordes}">
                                     <td>
                                         <div class="fe-mod-8-good fe-mod-8-good0" atc="0">
@@ -345,26 +299,17 @@
                                                     <div class="sale_num" th:text="${bookRecorde.num}">
                                                     </div>
                                                     <div class="fe-mod-8-main-name">
-                                                        <!--<div class="fe-mod-8-main-name-name vote_selected" id="selected_794409" rel="投票" style="color: blue"  onclick="ready_vote(2,this)">投票</div>-->
-                                                        <!--<input type="submit" value="投票" name="login" id="login0" class="login0" style='color: black'  >-->
-
-                                                        <input type="checkbox" name = "select" class = "radio_type" id = "vote" />
-                                                        <!--<span class = "span-style">testFS3</span>-->
+                                                        <input type="checkbox" name = "select" class = "radio_type" th:id = "${bookRecorde.bookName}" />
                                                     </div>
                                                 </a>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                            <!--</div>-->
                         </table>
-
                         <input type="submit" value="投票" name="vote" id="vote" class="vote" onclick="sub()">
-                    <!--</form>-->
                 </div>
             </div>
-
-
     </div>
 
 
@@ -386,9 +331,7 @@
     }
     setInterval("document.getElementById('dateTime').innerHTML = (new Date()).format('yyyy-MM-dd hh:mm:ss');", 1000);
     </script>
-
     <div id="dateTime"></div>
-    <p><a href="http://localhost:8080/queryAll">投票信息介绍</a></p>
-
+    <p><a href="http://10.225.10.102:8080/queryAll">投票信息介绍</a></p>
 </body>
 </html>

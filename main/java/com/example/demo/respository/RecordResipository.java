@@ -19,12 +19,6 @@ public interface RecordResipository extends JpaRepository<UserRecorde,String> {
     @Transactional
     @Query(value = "insert into votedRecorde (phone,votetime) values (?1 and ?2)",nativeQuery = true)
     int insertVoteRecord( String phone, String votetime);
-
-//
-//    @Query(value = "select * from voted_recorde where phone = ?1 ",nativeQuery = true)
-//    List<UserRecorde> selectUserRecorde(String phone);
-
-
     @Query(value = "SELECT votetime FROM voted_recorde WHERE phone = ?1 ORDER BY votetime DESC LIMIT 1",nativeQuery = true)
     String selectUserRecordeTime(String phone);
 

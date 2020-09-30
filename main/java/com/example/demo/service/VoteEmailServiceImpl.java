@@ -18,6 +18,7 @@ public class VoteEmailServiceImpl{
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setFrom(from);
+
             simpleMailMessage.setTo(to);
             simpleMailMessage.setSubject(object);
             simpleMailMessage.setText(content);

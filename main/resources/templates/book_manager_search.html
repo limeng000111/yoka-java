@@ -86,7 +86,7 @@
                 alert(check_val);
                 alert("----即将进入ajax----");
                 $.ajax({
-                    url : "http://localhost:8080/data",
+                    url : "http://10.225.10.102:8080/data",
                     type : "GET",
                     data : {"check_val" : check_val,"phone":phoneNum},
                     contentType:"application/x-www-form-urlencoded;charset=UTF-8",
@@ -120,7 +120,7 @@
             } else {
                 alert("进入ajax");
                 $.ajax({
-                    url : "http://localhost:8080/queryBook",
+                    url : "http://10.225.10.102:8080/queryBook",
                     type : "GET",
                     data : {"searchBook":$("#search").val()},
                     contentType:"application/x-www-form-urlencoded;charset=UTF-8",

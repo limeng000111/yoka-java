@@ -29,10 +29,9 @@ public class MailServiceImpl implements MailService {
         message.setText(content);
         try {
             javaMailSender.send(message);
-            System.out.println(String.format("[success] [%s]", to));
-
+            log.info(String.format("[success] [%s]", to));
         } catch (MailException ex) {
-            System.out.println(String.format("[error:%s] [%s]", ex.getMessage(), to));
+            log.info(String.format("[error:%s] [%s]", ex.getMessage(), to));
         }
     }
 }

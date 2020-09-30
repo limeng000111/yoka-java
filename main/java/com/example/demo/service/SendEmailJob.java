@@ -24,11 +24,10 @@ public class SendEmailJob {
         String subject = "hello, 这是投票统计邮件";
         String content = "详情请见地址：http://localhost:8080/resultChartLine";
         mailService.sendSimpleMail(to, subject, content);
-
         //设置日期格式
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // new Date()为获取当前系统时间
         String time = df.format(new Date());
-        System.out.println("发送邮件成功:"+time);
+        log.info("发送邮件成功:"+time);
     }
 }

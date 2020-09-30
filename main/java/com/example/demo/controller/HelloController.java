@@ -1,9 +1,4 @@
 package com.example.demo.controller;
-
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.example.demo.User.BookNumInfo;
 import com.example.demo.User.UserInfo;
 import com.example.demo.User.UserRecorde;
@@ -11,28 +6,20 @@ import com.example.demo.respository.BookNumResipository;
 import com.example.demo.respository.RecordResipository;
 import com.example.demo.respository.UserResipository;
 import com.example.demo.service.VoteEmailServiceImpl;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import org.apache.catalina.User;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.ls.LSException;
-
-import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.logging.Logger;
 
 
 @Controller
 public class HelloController {
+
+    private static Logger log = (Logger) Logger.getLogger(String.valueOf(HelloController.class));
 
     @Autowired
     UserResipository userResipository;
@@ -54,11 +41,10 @@ public class HelloController {
     @Value("${yoka.endTime}")
     private String endTime;
 
-    @RequestMapping("/themleaf")
-//    @GetMapping(value = "/themleaf")
+    @RequestMapping(value = "/themleaf", method = RequestMethod.GET)
     public String themleaf(Map<String, String> map) {
         map.put("hello", "xiaoming");
-        System.out.println("截止时间：" + endTime);
+        log.info("截止时间：" + endTime);
         return "them";
     }
 
@@ -66,15 +52,13 @@ public class HelloController {
     public String vote(Model model){
         List<BookNumInfo> list = new ArrayList();
         list = bookNumResipository.findAll();
-        List listNum = new ArrayList();
         //获取总票数
         int sum = 0;
-        for (int i = 0; i < list.size();i++){
-            int bookVoteNum = list.get(i).getNum();
-            sum +=bookVoteNum;
-//            listNum.add(bookVoteNum);
+        for (BookNumInfo bookNumInfo : list) {
+            int bookVoteNum = bookNumInfo.getNum();
+            sum += bookVoteNum;
         }
-        System.out.println(sum);
+        log.info(String.valueOf(sum));
         model.addAttribute("totalNum",sum);
         //将书籍投票作为对象返回到前端
         model.addAttribute("bookRecordes",list);
@@ -88,12 +72,11 @@ public class HelloController {
         //判断时间是否过期
         boolean is_time = isEndTime();
         //判断当天是否投过票
-//        VoteDay voteDay = new VoteDay();
         boolean is_flag1 = voteDay.isVoted(phone);
         if (is_time){
             if (is_flag1){
-                System.out.println("没有到截止时间");
-                System.out.println("前端页面传过来的手机号："+ phone);
+                log.info("没有到截止时间");
+                log.info("前端页面传过来的手机号："+ phone);
                 //设置日期格式
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 // new Date()为获取当前系统时间
@@ -102,13 +85,12 @@ public class HelloController {
                 userRecorde.setPhone(phone);
                 userRecorde.setVotetime(time);
                 recordResipository.save(userRecorde);
+                log.info("前端传过来的选中书籍为："+params);
                 for (String book : params){
-                    System.out.println("for循环获得每一本书："+book);
+                    log.info("for循环获得每一本书："+book);
                     userResipository.updateBookNum(book);
-//
-                    System.out.println("update成功");
+                    log.info("update成功");
                 }
-                System.out.println("即将进入return");
                 return "投票成功";
             }else {
                 return "您已经投过票啦";
@@ -124,9 +106,7 @@ public class HelloController {
         //获取当前时间戳
         long currentTime = System.currentTimeMillis() / 1000;
         long stringEndTime = Long.parseLong(endTime);
-        if (currentTime > stringEndTime){
-            flag = false;
-        }else {
+        if (currentTime < stringEndTime){
             flag = true;
         }
         return flag;
@@ -136,7 +116,6 @@ public class HelloController {
     @RequestMapping("/register")
     public String  registerPage(Model model){
         model.addAttribute("registerImage","/static/img/companylog.png");
-
         return "register";
     }
 
@@ -148,11 +127,8 @@ public class HelloController {
                                 @RequestParam(value = "email") String email
                                 ){
         //判断用户是否注册
-        List list = new ArrayList();
-        list = userResipository.selectUser(name,password);
-        System.out.println("----这是用户数据："+list);
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("book_manager");
+        List list = userResipository.selectUser(name,password);
+        log.info("----这是用户数据："+list);
         if (list.size() == 0){
             //将注册的用户信息添加到数据库
             UserInfo user = new UserInfo();
@@ -163,12 +139,12 @@ public class HelloController {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             // new Date()为获取当前系统时间
             String time = df.format(new Date());
-            System.out.println(time);
+            log.info("输出当前系统时间："+ time);
             user.setTime(time);
             //调用分装好的方法进行保存
             userResipository.save(user);
-            System.out.println("新增用户添加到数据库中，请查看。");
-            System.out.println("注册用户信息："+name+" "+password+" " + email);
+            log.info("新增用户添加到数据库中，请查看。");
+            log.info("注册用户信息："+name+" "+password+" " + email);
             return "注册成功";
         }else {
             return "存在该用户";
@@ -186,45 +162,31 @@ public class HelloController {
     @RequestMapping(value = "/loginData",method = RequestMethod.POST)
     public String loginData(@RequestParam(value = "userName") String name,
                             @RequestParam(value = "passWord") String password){
-        System.out.println("登录用户信息："+name+" "+password);
+        log.info("登录用户信息："+name+" "+password);
         //查询数据库有无此用户
-        List list = new ArrayList();
-        list = userResipository.selectUser(name,password);
-        System.out.println("----这是用户数据："+list);
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("book_manager");
+        List list = userResipository.selectUser(name,password);
         if (list.size() != 0){
             return "存在该用户";
         }else {
             return "不存在该用户";
         }
-
     }
 
     //查询所有用户的邮箱
     @RequestMapping("/queryAll")
 
     public String queryAll(){
-
-
         return "introduction";
     }
 
     //查询投票次数
     @RequestMapping("/resultChartsLine")
     public String queryAllBook(Model model){
-//        [{value:1230, name:'Spark SQL实战'}]
-        HashMap valueMap = new HashMap();
-        HashMap nameMap = new HashMap();
         HashMap<String,Integer> hashMap = new HashMap<>();
         List<BookNumInfo> list = new ArrayList();
-        List listResult = new ArrayList();
         list = bookNumResipository.findAll();
         List listNum = new ArrayList();
-        HashMap allMap = new HashMap();
-        HashMap totalMap = new HashMap();
         for (int i = 0; i < list.size();i++){
-            String bookName = list.get(i).getBookName();
             int bookVoteNum = list.get(i).getNum();
             listNum.add(bookVoteNum);
         }
@@ -267,9 +229,9 @@ public class HelloController {
         List<BookNumInfo> list = new ArrayList();
         List<String> nameList =new ArrayList<String>();
         list = bookNumResipository.findAll();
-        for (int i = 0; i < list.size();i++){
-            String bookName = list.get(i).getBookName();
-            int bookVoteNum = list.get(i).getNum();
+        for (BookNumInfo bookNumInfo : list) {
+            String bookName = bookNumInfo.getBookName();
+            int bookVoteNum = bookNumInfo.getNum();
             valueList.add(bookVoteNum);
             nameList.add(bookName);
         }

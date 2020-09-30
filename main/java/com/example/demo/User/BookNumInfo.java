@@ -62,13 +62,4 @@ public class BookNumInfo {
                 ", img='" + img + '\'' +
                 '}';
     }
-
-//    @Override
-//    public String toString() {
-//        return "BookNumInfo{" +
-//                "id=" + id +
-//                ", bookName='" + bookName + '\'' +
-//                ", num=" + num +
-//                '}';
-//    }
 }
