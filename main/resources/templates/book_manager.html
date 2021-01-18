@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>图书管理</title>
-
-    <!--添加背景音乐-->
-    <!--<embed src="http://p4.music.126.net/HvB44MNINoLar8HFbRjIGQ==/109951165142435842.jpg?param=50y50&amp;quality=100" hidden="true" autostart="true" loop="true">-->
-    <!--<script type="text/javascript" src="../static/script/jquery-1.7.2.js"></script>-->
-    <embed  loop="true"  autostart="true" hidden="true"
-           src="https://music.163.com/song?id=28152199&userid=344979197" >
-    </embed>
+    <embed src="https://music.163.com/song?id=28152199&userid=344979197" hidden="true" autostart="true" loop="true">
+    <audio autoplay="autoplay" loop="loop" controls="controls">
+        <source src="../static/music/康姆士COM'Z%20-%20你要如何，我们就如何.mp3"
+                type="audio/mp3">
+    </audio>
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript">
-
         //倒计时，截止时间：2020/12/31 00:00:0
         var time_now_server,time_now_client,time_end,time_server_client,timerID;
         time_end=new Date("2020/12/31 00:00:0");//结束的时间
@@ -166,7 +163,10 @@
 
 </head>
 <style type="text/css">
-    div{
+
+
+
+div{
         font-size:20px
     }
 
@@ -252,12 +252,11 @@
 倒计时：<div id="timer">
 </div>
 <!--背景音乐-->
-<!--<input type="submit" value="投票" name="vote" id="vote" class="vote" onclick="sub()">-->
-<audio autoplay="autoplay" loop="loop" preload="auto" controls="controls"
-       src="http://p4.music.126.net/HvB44MNINoLar8HFbRjIGQ==/109951165142435842.jpg?param=50y50&amp;quality=100">
+<audio autoplay="autoplay" loop="loop" controls="controls">
+    <source src="../static/music/康姆士COM'Z%20-%20你要如何，我们就如何.mp3"
+            type="audio/mp3">
 </audio>
-<embed src=" " autostart="false" loop="false" />
-<bgsound src=" " autostart="true" loop="false" />
+<!--<embed src="../static/music/music.mp3" width=170 height=25 loop="true" autostart="true">-->
 <div class="search">
     <input class="itxt" type="text" placeholder="根据书名进行查找" autocomplete="off"
        tabindex="1" name="seach" id="search"/>

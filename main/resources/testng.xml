@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="All Test Suite" allow-return-values="false">
+    <test name="YokaAuto">
+        <parameter name="Java" value="nihao"/>
+        <classes>
+            <class name="com.example.demo.exercise.TestngGroups"/>
+        </classes>
+    </test>
+</suite>
