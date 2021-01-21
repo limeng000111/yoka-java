@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Service
+@Component
 public class TimeUtil {
     /**
      * 获取当前时间，转换成年月日格式

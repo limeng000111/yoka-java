@@ -2,9 +2,11 @@ package com.example.yoka.dao;
 
 
 import com.example.yoka.entity.Student;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+@Mapper
 public interface StudentDao {
 
     /**

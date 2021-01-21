@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.jupiter.api.Test;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,13 +14,13 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Logger;
 
+@Service
 public class MybatisTest {
 
     private  static Logger log = (Logger) Logger.getLogger(String.valueOf(MybatisTest.class));
 
     public static SqlSession testMybatis() throws IOException {
-        SqlSession session = null;
-        try {
+            SqlSession session = null;
             //mybatis的配置文件
             String resource = "mybatis-config.xml";
             //类加载器加载配置文件
@@ -52,12 +53,7 @@ public class MybatisTest {
 //            log.info("即将执行插入操作");
 //            session.insert(statement1,lisi);
 //            log.info("插入成功");
-        }catch (IOException e){
-            e.printStackTrace();
-        }finally {
-            session.commit();
-            session.close();
-        }
+
         return session;
     }
 

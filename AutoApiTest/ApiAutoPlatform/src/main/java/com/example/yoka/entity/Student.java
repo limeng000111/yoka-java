@@ -1,7 +1,11 @@
 package com.example.yoka.entity;
 
-public class Student {
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+public class Student {
 
     private int id;
     private String name;

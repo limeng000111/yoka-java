@@ -9,7 +9,7 @@ import java.io.IOException;
  * author:JACK
  * date:2021/1/20
  */
-
+@Mapper
 public interface ProjectInter {
     /**
      * 新增项目
@@ -24,10 +24,8 @@ public interface ProjectInter {
      * @param project_name
      * @param api_ip
      * @param moudle
-     * @param createTime
-     * @param updateTime
      */
-    void updateProject(String project_name,String api_ip,String moudle,String createTime,String updateTime);
+    void updateProject(String project_name,String api_ip,String moudle);
 
     /**
      * 删除项目

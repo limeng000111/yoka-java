@@ -7,16 +7,19 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+@Component
 public class SqlSessionFactoryUtil {
-    @Test
+
     public static void testConnectMybatis() throws IOException {
         System.out.println("1111");
         try {
-            SqlSessionFactory sqlSessionFactory;
             //mybatis的配置文件
             String resource = "mybatis-config.xml";
             //类加载器加载配置文件

@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.yoka.dao.ProjectDao">
-    <select id="addProject"  parameterType="com.example.yoka.entity.Project">
-        insert into project (id,project_name,api_ip,moudle,create_time,update_time) VALUES (#{id},#{project_name},#{api_ip},#{moudle},#{create_time},#{update_time})
-    </select>
-    <insert id="insertStudent" parameterType="com.example.yoka.entity.Student" useGeneratedKeys="true" keyProperty="id">
-        insert into student (name,height,weight) VALUES (#{name},#{height},#{weight})
+    <insert id="addProject"  parameterType="com.example.yoka.entity.Project" useGeneratedKeys="true" keyProperty="id">
+        insert into project (project_name,api_ip,moudle,create_time,update_time) VALUES (#{project_name},#{api_ip},#{moudle},#{create_time},#{update_time})
     </insert>
+
+    <select id="queryProject"  parameterType="String" >
+        select * from project where project_name=#{projectName}
+    </select>
+
+    <update id="updateProject"  parameterType="com.example.yoka.entity.Project" >
+        update project set api_ip=#{api_ip},moudle=#{moudle},update_time
+    </update>
 </mapper>

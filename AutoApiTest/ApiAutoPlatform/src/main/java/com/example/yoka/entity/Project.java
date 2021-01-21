@@ -1,16 +1,16 @@
 package com.example.yoka.entity;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.context.annotation.Bean;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-@Entity
+//@Entity
 public class Project {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String project_name;
     private String api_ip;
