@@ -1,8 +1,10 @@
 package com.example.yoka.service;
 
+import com.example.yoka.entity.Project;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -17,7 +19,7 @@ public interface ProjectInter {
      * @param api_ip
      * @param moudle
      */
-    void addProject(String project_name,String api_ip,String moudle) throws IOException;
+    Boolean addProject(String project_name,String api_ip,String moudle) throws IOException;
 
     /**
      * 修改项目
@@ -25,22 +27,22 @@ public interface ProjectInter {
      * @param api_ip
      * @param moudle
      */
-    void updateProject(String project_name,String api_ip,String moudle);
+    Boolean updateProject(String project_name,String api_ip,String moudle) throws IOException;
 
     /**
      * 删除项目
      * @param project_name
      */
-    void deleteProject(String project_name);
+        Boolean deleteProject(String project_name) throws IOException;
 
     /**
      * 查询单个项目
      * @param project_name
      */
-    void queryProject(String project_name);
+    Project queryProject(String project_name) throws IOException;
 
     /**
      * 查询所有项目
      */
-    void queryAllProject();
+    String queryAllProject() throws IOException;
 }

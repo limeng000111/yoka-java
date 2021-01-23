@@ -11,20 +11,40 @@ import javax.persistence.Id;
 public class Project {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
     private String project_name;
     private String api_ip;
     private String moudle;
     private String create_time;
     private String update_time;
 
-    public Project(int id, String project_name, String api_ip, String moudle, String create_time, String update_time) {
+    public Project(Integer id, String project_name, String api_ip, String moudle, String create_time, String update_time) {
         this.id = id;
         this.project_name = project_name;
         this.api_ip = api_ip;
         this.moudle = moudle;
         this.create_time = create_time;
         this.update_time = update_time;
+    }
+
+    public Project() {
+    }
+
+
+    public void setUpdate_time(String update_time) {
+        this.update_time = update_time;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", project_name='" + project_name + '\'' +
+                ", api_ip='" + api_ip + '\'' +
+                ", moudle='" + moudle + '\'' +
+                ", create_time='" + create_time + '\'' +
+                ", update_time='" + update_time + '\'' +
+                '}';
     }
 
     public int getId() {
@@ -35,11 +55,11 @@ public class Project {
         this.id = id;
     }
 
-    public String getProject_name() {
+    public String getproject_name() {
         return project_name;
     }
 
-    public void setProject_name(String project_name) {
+    public void setproject_name(String project_name) {
         this.project_name = project_name;
     }
 
@@ -69,21 +89,5 @@ public class Project {
 
     public String getUpdate_time() {
         return update_time;
-    }
-
-    public void setUpdate_time(String update_time) {
-        this.update_time = update_time;
-    }
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", project_name='" + project_name + '\'' +
-                ", api_ip='" + api_ip + '\'' +
-                ", moudle='" + moudle + '\'' +
-                ", create_time='" + create_time + '\'' +
-                ", update_time='" + update_time + '\'' +
-                '}';
     }
 }

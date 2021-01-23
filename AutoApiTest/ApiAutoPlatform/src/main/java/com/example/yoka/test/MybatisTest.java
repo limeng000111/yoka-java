@@ -1,6 +1,7 @@
 package com.example.yoka.test;
 
 
+import com.example.yoka.entity.Student;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -67,6 +68,30 @@ public class MybatisTest {
         long endTime = System.currentTimeMillis();
         long runTime = (endTime - startTime)/1000;//单位：秒
         log.info("总运行："+runTime+"秒");
+    }
+
+
+
+    @Test
+    public void testQueryMybatis() throws IOException {
+        SqlSession session = null;
+        //mybatis的配置文件
+        String resource = "mybatis-config.xml";
+        //类加载器加载配置文件
+        InputStream is = Resources.getResourceAsStream(resource);
+        /**
+         * 构建sqlSession的工厂
+         * @throws IOException
+         */
+        SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(is);
+        /**
+         * 创建能执行映射文件sql中的sqlSession
+         * @throws IOException
+         */
+        session = sessionFactory.openSession();
+        String statement = "com.example.yoka.dao.StudentDao.getStudent";
+        Student student = (Student) session.selectOne(statement,1);
+        System.out.println("--------result------"+student.getName());
     }
 
 
