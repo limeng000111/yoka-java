@@ -176,6 +176,4 @@ public class ProjectImp implements ProjectInter {
         log.info(tResultBuilder.toString());
         return tResultBuilder.toString();
     }
-
-
 }
