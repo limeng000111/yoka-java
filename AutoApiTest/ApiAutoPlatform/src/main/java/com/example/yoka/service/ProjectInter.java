@@ -1,5 +1,6 @@
 package com.example.yoka.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.yoka.entity.Project;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,7 +20,7 @@ public interface ProjectInter {
      * @param api_ip
      * @param moudle
      */
-    Boolean addProject(String project_name,String api_ip,String moudle) throws IOException;
+    JSONObject addProject(String project_name, String api_ip, String moudle) throws IOException;
 
     /**
      * 修改项目
@@ -27,22 +28,25 @@ public interface ProjectInter {
      * @param api_ip
      * @param moudle
      */
-    Boolean updateProject(String project_name,String api_ip,String moudle) throws IOException;
+    JSONObject updateProject(String project_name,String api_ip,String moudle) throws IOException;
 
     /**
      * 删除项目
      * @param project_name
      */
-        Boolean deleteProject(String project_name) throws IOException;
+    JSONObject deleteProject(String project_name) throws IOException;
 
     /**
      * 查询单个项目
      * @param project_name
      */
-    Project queryProject(String project_name) throws IOException;
+    JSONObject queryProject(String project_name) throws IOException;
 
     /**
      * 查询所有项目
      */
-    String queryAllProject() throws IOException;
+    JSONObject queryAllProject() throws IOException;
+
+    //根据模块进行查询
+    Project  queryByMoudle(String moudle) throws IOException;
 }

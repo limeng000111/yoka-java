@@ -44,4 +44,9 @@ public interface ProjectDao {
      * 查询所有项目
      */
     List<Project> queryAllProject();
+
+    /**
+     * 根据项目名查询项目
+     */
+    Project queryByMoudle(String moudle);
 }

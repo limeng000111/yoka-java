@@ -1,5 +1,6 @@
 package com.example.yoka.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.yoka.entity.Project;
 import com.example.yoka.service.Imp.ProjectImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,11 @@ public class ProjectController {
      */
     @RequestMapping(value = "/addProject", method = RequestMethod.POST)
     @ResponseBody
-    public Boolean addProject(@RequestParam(value = "project_name") String project_name,
-                             @RequestParam(value = "apiIp") String apiIp,
-                             @RequestParam(value = "module") String module) throws IOException {
+    public JSONObject addProject(@RequestParam(value = "project_name") String project_name,
+                                 @RequestParam(value = "apiIp") String apiIp,
+                                 @RequestParam(value = "module") String module) throws IOException {
         log.info("项目："+ project_name + "成功调用新增接口");
-        Boolean res = projectImp.addProject(project_name,apiIp,module);
-        return res;
+        return projectImp.addProject(project_name,apiIp,module);
     }
 
     /**
@@ -47,12 +47,11 @@ public class ProjectController {
      */
     @RequestMapping(value = "/updateProject",method = RequestMethod.POST)
     @ResponseBody
-    public Boolean updateProject(@RequestParam(value = "apiIp") String apiIp,
+    public JSONObject updateProject(@RequestParam(value = "apiIp") String apiIp,
                                 @RequestParam(value = "module") String module,
                                 @RequestParam(value = "project_name") String project_name
     ) throws IOException {
-        Boolean res = projectImp.updateProject(project_name,apiIp,module);
-        return res;
+        return projectImp.updateProject(project_name,apiIp,module);
     }
 
     /**
@@ -63,9 +62,8 @@ public class ProjectController {
      */
     @ResponseBody
     @RequestMapping(value = "/queryProject",method = RequestMethod.POST)
-    public Project queryProject(@RequestParam(value = "project_name") String project_name) throws IOException {
-        Project project = projectImp.queryProject(project_name);
-        return project;
+    public JSONObject queryProject(@RequestParam(value = "project_name") String project_name) throws IOException {
+        return projectImp.queryProject(project_name);
     }
 
     /**
@@ -73,17 +71,9 @@ public class ProjectController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/queryAllProject",method = RequestMethod.POST)
-    public String queryAllProject(){
-        String projects = null;
-        try {
-            projects = projectImp.queryAllProject();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        log.info("-----查询成功-----");
-        return projects;
+    @RequestMapping(value = "/queryAllProject",method = RequestMethod.GET)
+    public JSONObject queryAllProject() throws IOException {
+        return projectImp.queryAllProject();
     }
 
     /**
@@ -94,9 +84,8 @@ public class ProjectController {
      */
     @ResponseBody
     @RequestMapping(value = "/deleteProject",method = RequestMethod.POST)
-    public Boolean deleteProject(@RequestParam(value = "project_name") String project_name) throws IOException {
-        Boolean res = projectImp.deleteProject(project_name);
-        return res;
+    public JSONObject deleteProject(@RequestParam(value = "project_name") String project_name) throws IOException {
+        return projectImp.deleteProject(project_name);
     }
 
 }

@@ -45,11 +45,11 @@ public class ProjectImp implements ProjectInter {
      * @throws IOException
      */
     @Override
-    public Boolean addProject(String project_name, String api_ip, String moudle) throws IOException {
+    public JSONObject addProject(String project_name, String api_ip, String moudle) throws IOException {
         //查询数据库中是否存在该项目
-        Project res = queryProject(project_name);
+        Project res = isExistProject(project_name);
         if (res != null){
-            return false;
+            return new ResultBuilder(StatusCode.NO_PROJECT).toJSONObject();
         }else {
             try {
                 String statement = "com.example.yoka.dao.ProjectDao.addProject";
@@ -71,7 +71,7 @@ public class ProjectImp implements ProjectInter {
                 e.printStackTrace();
             }
         }
-        return true;
+        return new ResultBuilder("插入成功",StatusCode.SUCCESS).toJSONObject();
 
     }
 
@@ -83,12 +83,12 @@ public class ProjectImp implements ProjectInter {
      *
      */
     @Override
-    public Boolean updateProject(String project_name, String api_ip, String moudle) throws IOException {
+    public JSONObject updateProject(String project_name, String api_ip, String moudle) throws IOException {
         SqlSession session = MybatisTest.testMybatis();
         //判断项目名称是否存在
         if (project_name != null && !project_name.equals("")){
             log.info("前端传参为："+project_name+"---"+api_ip+"---"+moudle);
-            Project project1 = queryProject(project_name);
+            Project project1 = isExistProject(project_name);
              if (project1 != null && !project1.equals("")){
                  try {
                      //获取当前时间
@@ -105,30 +105,37 @@ public class ProjectImp implements ProjectInter {
                  }finally {
                      session.commit();
                      session.close();
-                     return true;
+                     return new ResultBuilder("更新成功",StatusCode.SUCCESS).toJSONObject();
                  }
 
              }else {
-                 return false;
+                 log.info("出错了");
              }
         }
-        return false;
+        return new ResultBuilder(StatusCode.UPDATE_PROJECT_FAILED).toJSONObject();
         //判断传入字段是否完整
         //更新时间
     }
 
     @Override
-    public Boolean deleteProject(String project_name) throws IOException {
-        Project project = queryProject(project_name);
-        if (project != null){
-            SqlSession session = MybatisTest.testMybatis();
-            String queryStatement = "com.example.yoka.dao.ProjectDao.deleteProject";
-            session.delete(queryStatement,project_name);
-            session.commit();
-            session.close();
-            return true;
+    public JSONObject deleteProject(String project_name) throws IOException {
+        try {
+            Project project = isExistProject(project_name);
+            log.info("进入delete方法中："+project.toString());
+            if (project != null){
+                SqlSession session = MybatisTest.testMybatis();
+                String queryStatement = "com.example.yoka.dao.ProjectDao.deleteProject";
+                session.delete(queryStatement,project_name);
+                session.commit();
+                session.close();
+                return new ResultBuilder(StatusCode.SUCCESS).toJSONObject();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            session.rollback();
         }
-        return false;
+
+        return new ResultBuilder(StatusCode.DELETE_PROJECT_FAILED).toJSONObject();
     }
 
     /**
@@ -138,13 +145,33 @@ public class ProjectImp implements ProjectInter {
      * @throws IOException
      */
     @Override
-    public Project queryProject(String project_name) throws IOException {
+    public JSONObject queryProject(String project_name) throws IOException {
         Project project = null;
         SqlSession session = MybatisTest.testMybatis();
         String statement = "com.example.yoka.dao.ProjectDao.queryProject";
         ProjectDao mapper = session.getMapper(ProjectDao.class);
         Project res = session.selectOne(statement, project_name);
 //        log.info("根据项目名成功查询出结果："+res.toString());
+        session.commit();
+        session.close();
+        return new ResultBuilder(res,StatusCode.SUCCESS).toJSONObject();
+    }
+
+    public Project isExistProject(String projectName) throws IOException {
+        Project res = null;
+        try {
+            Project project = null;
+            SqlSession session = MybatisTest.testMybatis();
+            String statement = "com.example.yoka.dao.ProjectDao.queryProject";
+            ProjectDao mapper = session.getMapper(ProjectDao.class);
+            res = session.selectOne(statement, projectName);
+//            log.info("根据项目名成功查询出结果："+res.toString());
+            session.commit();
+            session.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return res;
     }
 
@@ -154,7 +181,7 @@ public class ProjectImp implements ProjectInter {
      * @throws IOException
      */
     @Override
-    public String queryAllProject() throws IOException {
+    public JSONObject queryAllProject() throws IOException {
         SqlSession session = MybatisTest.testMybatis();
         String statement = "com.example.yoka.dao.ProjectDao.queryAllProject";
         List<Project> list = session.selectList(statement);
@@ -174,6 +201,23 @@ public class ProjectImp implements ProjectInter {
         session.close();
         ResultBuilder<JSONObject> tResultBuilder = new ResultBuilder<>(jsonObject, StatusCode.SUCCESS);
         log.info(tResultBuilder.toString());
-        return tResultBuilder.toString();
+        return new ResultBuilder(res,StatusCode.SUCCESS).toJSONObject();
+    }
+
+    //根据模块查询是否存在项目
+    @Override
+    public Project queryByMoudle(String moudle) throws IOException {
+        SqlSession session = MybatisTest.testMybatis();
+        ArrayList<Object> objects = new ArrayList<>();
+        String statement = "com.example.yoka.dao.ProjectDao.queryAllProject";
+        try {
+            Project project = session.selectOne(statement,moudle);
+            log.info("根据模块查询数据的结果："+project.toString());
+            return project;
+        }catch (Exception e){
+            log.info("根据模块查询数据错误，模块名："+moudle);
+        }
+        return null;
+
     }
 }
