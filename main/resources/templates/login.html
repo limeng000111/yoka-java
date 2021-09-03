@@ -26,17 +26,14 @@
                     return false;
                 }
                 $.ajax({
-                    url : "http://10.225.10.102:8080/login",
-                    type : "POST",
+                    url : "http://10.225.10.102:8080/loginData",
+                    type : "GET",
                     data : {"userName" : usernameText,
                             "passWord" : passwordText,
                     },
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     success : function (data) {
                         if (data == "存在该用户"){
-                            // window.location.href='book_manager';
-                            // // 以下方式定时跳转
-                            // setTimeout("javascript:location.href='book_manager'", 500);
                             url = "book_manager?phone="+usernameText;
                             window.location.href = url;
                         }
@@ -57,7 +54,7 @@
             margin-top: 25px;
         }
         body {
-            background-image:url("index.jpg");
+            /*background-image:url("index.jpg");*/
             /*style=" background-repeat:no-repeat ;*/
             background-size:100% 100%;
             background-attachment: fixed;"

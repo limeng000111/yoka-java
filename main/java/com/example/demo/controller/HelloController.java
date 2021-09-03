@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
@@ -154,18 +156,22 @@ public class HelloController {
     //打开登录页面
     @RequestMapping("/login")
     public String loginPage(){
+
         return "login";
     }
 
     //登录页面数据处理
     @ResponseBody
-    @RequestMapping(value = "/loginData",method = RequestMethod.POST)
+    @RequestMapping(value = "/loginData",method = RequestMethod.GET)
     public String loginData(@RequestParam(value = "userName") String name,
-                            @RequestParam(value = "passWord") String password){
+                            @RequestParam(value = "passWord") String password, HttpSession session){
         log.info("登录用户信息："+name+" "+password);
         //查询数据库有无此用户
         List list = userResipository.selectUser(name,password);
-        if (list.size() != 0){
+        log.info("list里的值："+list.size());
+        if (list.size() == 1){
+            log.info("list为1，进来了");
+            session.setAttribute("username",name);
             return "存在该用户";
         }else {
             return "不存在该用户";
